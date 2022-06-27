@@ -1,0 +1,2 @@
+1) run 'npm install' in crud-operation,server & client.
+2) run the project by command 'npm run dev' in crud-operation
