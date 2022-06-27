@@ -1,0 +1,10 @@
+.add_btn{
+    text-align: right;
+}
+.table-voilet{
+    background-color: #8F00FF;
+    color:white;
+}
+.container{
+    overflow: auto;
+}
