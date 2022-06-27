@@ -6,6 +6,7 @@ import Home from './Component/Home';
 import Register from './Component/Register';
 import { Route, Routes } from 'react-router-dom'
 import Edit from './Component/Edit';
+import Details from './Component/Details';
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/edit/:id" element={<Edit />} />
+        <Route exact path="/view/:id" element={<Details />} />
       </Routes>
     </>
   );
