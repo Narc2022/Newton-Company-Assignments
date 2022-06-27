@@ -1,7 +1,10 @@
-import React, {useState} from 'react'
-import { NavLink } from 'react-router-dom'
+import { useParams , NavLink,useNavigate } from 'react-router-dom';
+import React, {useEffect , useState} from 'react';
 
 const Edit = () => {
+    // const [getuserdata, setUserdata] = useState([]);
+    // console.log(getuserdata);
+    const history = useNavigate();
     const [inpval, setINP] = useState({
         name:"",
         email:"",
@@ -22,6 +25,63 @@ const Edit = () => {
            }
         )
        }
+
+       const { id } = useParams("");
+
+
+       const getdata = async () => {
+   
+           const res = await fetch(`/getuser/${id}`, {
+               method: "GET",
+               headers: {
+                   "Content-Type": "application/json"
+               }
+           });
+   
+           const data = await res.json();
+           console.log(data);
+   
+           if (res.status === 422 || !data) {
+               console.log("error ");
+   
+           } else {
+               setINP(data)
+               console.log("get data");
+           }
+       }
+
+       const updateuser = async(e)=>{
+        e.preventDefault();
+
+        const {name,email,work,add,mobile,desc,age} = inpval;
+
+        const res2 = await fetch(`/updateuser/${id}`,{
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body:JSON.stringify({
+                name,email,work,add,mobile,desc,age
+            })
+        });
+
+        const data2 = await res2.json();
+        console.log(data2);
+
+        if(res2.status === 422 || !data2){
+            alert("fill the data");
+        }else{
+            alert("data added")
+            history("/");
+        }
+        
+    }
+
+
+       useEffect(() => {
+         getdata();
+       }, [])
+       
   return (
     <div className='container'>
         <NavLink to="/">Home</NavLink>
@@ -55,7 +115,7 @@ const Edit = () => {
                         <label className="form-label">Description</label>
                         <textarea name="desc" value={inpval.desc} onChange={setdata} className='form-control' cols="30" rows="10"></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={updateuser} className="btn btn-primary">Submit</button>
                 </div>
             </form>
     </div>

@@ -1,29 +1,54 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const Register = () => {
-   const [inpval, setINP] = useState({
-     name:"",
-     email:"",
-     age:"",
-     mobile:"",
-     work:"",
-     add:"",
-     desc:""
-   })
-    const setdata = (e) =>{
+    const [inpval, setINP] = useState({
+        name: "",
+        email: "",
+        age: "",
+        mobile: "",
+        work: "",
+        add: "",
+        desc: ""
+    })
+    const setdata = (e) => {
         console.log(e.target.value);
-        const {name,value} =e.target;
-        setINP((preval)=>{
-            return{
+        const { name, value } = e.target;
+        setINP((preval) => {
+            return {
                 ...preval,
-                [name]:value
+                [name]: value
             }
         })
     }
-  return (
-    <div className='container'>
-        <NavLink to="/">Home</NavLink>
+
+    const addinpdata = async(e) => {
+        e.preventDefault();
+
+        const { name, email, age, mobile, work, add, desc } = inpval;
+        const res = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name, email, age, mobile, work, add, desc
+            })
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if (res.status === 422 || !data) {
+            alert("error");
+            console.log("error");
+        }else{
+            alert("data added");
+            console.log("data added")
+        }
+    }
+    return (
+        <div className='container'>
+            <NavLink to="/">Home</NavLink>
             <form className='mt-4'>
                 <div className='row'>
                     <div className="mb-3 col-lg-6 col-md-6 col-12">
@@ -54,11 +79,11 @@ const Register = () => {
                         <label className="form-label">Description</label>
                         <textarea name="desc" value={inpval.desc} onChange={setdata} className='form-control' cols="30" rows="10"></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={addinpdata} className="btn btn-primary">Submit</button>
                 </div>
             </form>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default Register
